@@ -1,6 +1,6 @@
 # iterative-characteristic-modes
 
-<img src="iterative-image" alt="drawing" height="400"/>
+<img src="iterative-image.png" height="100"/>
 
 An example of the iterative, scattering-based algorithm for computing characteristic modes presented in [1].  
 
