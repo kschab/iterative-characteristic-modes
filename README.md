@@ -6,7 +6,7 @@ An example of the iterative, scattering-based algorithm for computing characteri
 
 ## Implementation notes
 
-The example utilizes pre-calculated data from method of moments simulations to reduce both the code complexity and the computational cost of the demonstration.  Pre-calculated data are provided for an infinitely long, perfectly conducting elliptical cylinder with major and minor axes related by an aspect ratio of 4.  
+The example utilizes pre-calculated data from method of moments simulations to reduce both the code complexity and the computational cost of the demonstration.  Pre-calculated data are provided for an infinitely long, perfectly conducting elliptical cylinder with major and minor axes related by an aspect ratio of 4.  All electric fields are polarized parallel to the axis of the cylinder.
 
 The use of these pre-calculated data to emulate calls to a general full-wave solver is clearly delineated within the code.  In more realistic applications of the algorithm, those lines would be replaced with calls to whatever full-wave simulator is best suited for the problem being studied.
 
