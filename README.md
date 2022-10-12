@@ -1,5 +1,7 @@
 # iterative-characteristic-modes
 
+<img src="iterative-image" alt="drawing" height="400"/>
+
 An example of the iterative, scattering-based algorithm for computing characteristic modes presented in [1].  
 
 ## Implementation notes
@@ -16,11 +18,16 @@ Three user settings alter the behavior of the demonstration (see code for furthe
 
 ## Timing and performance
 
-The computational cost of calculating characteristic modes using the full scattering dyadic versus the iterative algorithm can be assessed by disabling the plotting and full-wave acceleration features (`fastflag = 0` and `plotting = 0`).  With these 
+The computational cost of calculating characteristic modes using the full scattering dyadic versus the iterative algorithm can be assessed by disabling the plotting and full-wave acceleration features (`fastflag = 0` and `plotting = 0`).  With these settings, along with no undersampling (`undersampling = 1`), the following computational times, numbers of iterations, and numbers of modes with modal significance greater than 0.01 were obtained on a MacBook Air (M1, 2020):
 
-|   | ka = 0.1\pi | ka = \pi |
-| ------------- | ------------- | --|
-| Content Cell  | Content Cell  | |
-| Content Cell  | Content Cell  | |
+|   | ka = 0.1π | ka = π | ka = 10π |
+| ------------- | ------------- | -- | -- |
+| Full calculation  | 34  | 33 | 34 |
+| Iterative algorithm  | 1.5  | 4.7 | 21 |
+| Iterations | 6 | 9 | 51 |
+| \# modes MS>0.01 | 3 | 9  | 51|
 
 ## References
+
+[1] Lundgren, Schab, Capek, Gustafsson, and Jelinek, "Iterative calculation of characteristic modes using arbitrary full-wave solvers,'' arXiv preprint arXiv:2209.00097 (2022)
+
