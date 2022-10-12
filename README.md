@@ -22,8 +22,8 @@ The computational cost of calculating characteristic modes using the full scatte
 
 |   | ka = 0.1π | ka = π | ka = 10π |
 | ------------- | ------------- | -- | -- |
-| Full calculation  | 34  | 33 | 34 |
-| Iterative algorithm  | 1.5  | 4.7 | 21 |
+| Full calculation time (s) | 34  | 33 | 34 |
+| Iterative algorithm time (s) | 1.5  | 4.7 | 21 |
 | Iterations | 6 | 12 | 56 |
 | \# modes MS>0.01 | 3 | 9  | 51|
 
