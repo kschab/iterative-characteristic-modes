@@ -24,7 +24,7 @@ The computational cost of calculating characteristic modes using the full scatte
 | ------------- | ------------- | -- | -- |
 | Full calculation  | 34  | 33 | 34 |
 | Iterative algorithm  | 1.5  | 4.7 | 21 |
-| Iterations | 6 | 9 | 51 |
+| Iterations | 6 | 9 | 56 |
 | \# modes MS>0.01 | 3 | 9  | 51|
 
 ## References
