@@ -10,7 +10,7 @@ The example utilizes pre-calculated data from method of moments simulations to r
 
 The use of these pre-calculated data to emulate calls to a general full-wave solver is clearly delineated within the code.  In more realistic applications of the algorithm, those lines would be replaced with calls to whatever full-wave simulator is best suited for the problem being studied.
 
-Three user settings alter the behavior of the demonstration (see code for further details):
+Four user settings alter the behavior of the demonstration (see code for further details):
 - `kdex` : this selects one of three electrical sizes to show how the number of modes with high modal significance affects convergence of the iterative algorithm
 - `undersampling` : this parameter controls undersampling of radiation patterns used to construct the matrix representation of the scattering dyadic
 - `fastflag` : this flag precalculates a matrix inverse to accelerate emulation of a full-wave solver 
