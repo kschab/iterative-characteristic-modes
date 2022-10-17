@@ -8,6 +8,8 @@ An example of the iterative, scattering-based algorithm for computing characteri
 
 The example utilizes pre-calculated data from method of moments simulations to reduce both the code complexity and the computational cost of the demonstration.  Pre-calculated data are provided for an infinitely long, perfectly conducting elliptical cylinder with major and minor axes related by an aspect ratio of 4.  All electric fields are polarized parallel to the axis of the cylinder.
 
+Steps listed in the comments of the code correspond to the steps in Algorithm 2 of [1].
+
 The use of these pre-calculated data to emulate calls to a general full-wave solver is clearly delineated within the code.  In more realistic applications of the algorithm, those lines would be replaced with calls to whatever full-wave simulator is best suited for the problem being studied.
 
 Four user settings alter the behavior of the demonstration (see code for further details):
@@ -16,9 +18,11 @@ Four user settings alter the behavior of the demonstration (see code for further
 - `fastflag` : this flag precalculates a matrix inverse to accelerate emulation of a full-wave solver 
 - `plotting` : this flag enables or disables plotting
 
+By default, the modified Gram-Schmidt procedure is used in place of the Gram-Schmidt process described in Steps 8 and 9 of Algorithm 2 in [1].  This can be disabled by setting `mgs = 0`.
+
 ## Timing and performance
 
-The computational cost of calculating characteristic modes using the full scattering dyadic versus the iterative algorithm can be assessed by disabling the plotting and full-wave acceleration features (`fastflag = 0` and `plotting = 0`).  With these settings, along with no undersampling (`undersampling = 1`), the following computational times, numbers of iterations, and numbers of modes with modal significance greater than 0.01 were obtained on a MacBook Air (M1, 2020):
+Live plot updates greatly increase the apparent time of the iterative algorithm. To accurately assess the relative computational cost of calculating characteristic modes using the full scattering dyadic versus the iterative algorithm, disable the plotting and full-wave acceleration features (`fastflag = 0` and `plotting = 0`).  With these settings, along with no undersampling (`undersampling = 1`), the following computational times, numbers of iterations, and numbers of modes with modal significance greater than 0.01 were obtained on a MacBook Air (M1, 2020):
 
 |   | ka = 0.1π | ka = π | ka = 10π |
 | ------------- | ------------- | -- | -- |
