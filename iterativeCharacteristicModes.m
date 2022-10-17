@@ -180,9 +180,10 @@ while (m<maxIter) && sigModeError>1e-4
  
 
     % BEGIN STEP 5 ++++++++++++++++++++++++++++++++++++
-    % (emulation of full-wave solver using precalulated data)
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % begin emulation of full-wave solver using precalculated data
     % F(:,m) = L(a_(:,m))
-
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % -- construct new excitation vector for simulation
     Vp = 0;
     pdex = 0;
@@ -203,6 +204,9 @@ while (m<maxIter) && sigModeError>1e-4
 
     % -- calculate scattered field pattern due to most recent excitation
     F(:,m) = f*I;
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % end emulation of full-wave solver using precalculated data
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % END STEP 5 --------------------------------------
 
 
