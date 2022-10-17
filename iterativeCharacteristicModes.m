@@ -1,7 +1,23 @@
 close all
 clear
 clc
-
+% iterativeCharacteristicModes.m
+% 
+% an example implementation of the algorithm in Lundgren et al, "Iterative
+% Calculation of Characteristic Modes Using Arbitrary Full-wave Solvers", 
+% doi.org/10.48550/arXiv.2209.00097
+%
+% step numbers listed in comments correspond to algorithm steps in that
+% paper.
+%
+% the script uses precalculated method of moments data in place of calls to
+% a full-wave electromagnetic solver, see README.md for further details.
+%
+% contact info: 
+% kurt schab
+% santa clara university
+% kschab@scu.edu
+%
 % options
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % kdex = 1      ka = 0.1\pi     (electrically small)
@@ -30,7 +46,7 @@ clc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % begin user settings
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-kdex = 2;
+kdex = 3;
 undersampling = 1;
 fastflag = 1;
 plotting = 1;
@@ -116,8 +132,6 @@ if plotting
     xlabel('Re t_n')
     ylabel('Im t_n')
     title('eigenvalues t_n')
-    disp('full S construction complete, press any key to begin iterative solution')
-    waitforbuttonpress
 else
     if fastflag == 0
         fullTime = toc();
@@ -135,25 +149,40 @@ figure(101)
 maxIter = size(S,1);   % max number of iterations
 err = zeros(Nmodes,maxIter)*NaN;
 
+
+% BEGIN STEP 1 ++++++++++++++++++++++++++++++++++++
 % -- initialize iterative algorithm
 m = 1;
+% END STEP 1 --------------------------------------
+
+
+% BEGIN STEP 2 ++++++++++++++++++++++++++++++++++++
 a_ = [];
 a_(:,m) = rand(size(S,1),1);
-nA = 1;
+% END STEP 2 --------------------------------------
 
+
+% initialize plotting figure
+figure(101)
+
+% BEGIN STEP 3 ++++++++++++++++++++++++++++++++++++
+% (beginning of main iteration loop, no end)
 % loop until max iterations reached or the algorithm is sufficiently
 % converged.
 sigModeError = 1;
-figure(101)
 while (m<maxIter) && sigModeError>1e-4
 
+   
+    % BEGIN STEP 4 ++++++++++++++++++++++++++++++++++++
     % -- normalize most recent excitation
     a_(:,m) = a_(:,m)/sqrt(a_(:,m)'*a_(:,m)*dphi);
+    % END STEP 4 --------------------------------------
+ 
 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % begin emulation of full-wave solver using precalculated data
+    % BEGIN STEP 5 ++++++++++++++++++++++++++++++++++++
+    % (emulation of full-wave solver using precalulated data)
     % F(:,m) = L(a_(:,m))
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
     % -- construct new excitation vector for simulation
     Vp = 0;
     pdex = 0;
@@ -174,22 +203,24 @@ while (m<maxIter) && sigModeError>1e-4
 
     % -- calculate scattered field pattern due to most recent excitation
     F(:,m) = f*I;
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % end emulation of full-wave solver using precalculated data
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % END STEP 5 --------------------------------------
 
-    % -- create approximations of scattering dyadic and projection matrix
+
+    % BEGIN STEP 6 ++++++++++++++++++++++++++++++++++++
+    % -- create approximation of scattering dyadic
     Sm = 0;
-    Pm = 0;
     for p = 1:m
         Sm = Sm+F(:,p)*a_(:,p)'*dphi;
-        Pm = Pm+a_(:,p)*a_(:,p)';
     end
+    % END STEP 6 --------------------------------------
 
+
+    % BEGIN STEP 7 ++++++++++++++++++++++++++++++++++++
     % -- estimate eigenvalues
     [~,t_] = eigs(Sm,Nmodes,'lm');
     t_ = diag(t_)/sqrt(1j)*sqrt(k0)/(4*sqrt(pi/2));
     tm(:,m) = t_;
+    % END STEP 7 --------------------------------------
 
     % --  calculate indices of significant modes
     sigModes1EM2 = abs(t_)>0.01;
@@ -201,9 +232,25 @@ while (m<maxIter) && sigModeError>1e-4
         sigModeError = max(abs(err(sigModes1EM2,m)));
     end
 
+    % BEGIN STEPS 8 + 9 ++++++++++++++++++++++++++++++++
     % -- create excitation for next iteration
-    a_(:,m+1) = F(:,m) - Pm*F(:,m)*dphi;
+    mgs = 1;      % flag to select gram-schmidt or modified gram-schmidt
+    if mgs ~= 1
+        % gram-schmidt (explicitly steps 8 and 9)
+        Pm = 0;
+        for p = 1:m
+            Pm = Pm+a_(:,p)*a_(:,p)';
+        end
+        a_(:,m+1) = F(:,m) - Pm*F(:,m)*dphi;
+    else
+        % modified gram-schmidt (replaces steps 8 and 9)
+        a_(:,m+1) = F(:,m);
+        for p = 1:m
+            a_(:,m+1) = a_(:,m+1) - a_(:,p)*dot(a_(:,p),a_(:,m+1))*dphi;
+        end
+    end
     nA = norm(a_(:,m+1));
+    % END STEPS 8 + 9 ---------------------------------
 
     % -- update plots and output status
     if plotting
@@ -244,8 +291,13 @@ while (m<maxIter) && sigModeError>1e-4
             xlim([0,70])
         end
     end
+
+    % BEGIN STEP 10 +++++++++++++++++++++++++++++++++++
     m = m+1;
-    TITER = t_;
+    % END STEP 10 -------------------------------------
+
+    % -- store most recent estimates for later comparison
+    TITER = t_; 
 end
 
 if (plotting==0) && (fastflag == 0)
