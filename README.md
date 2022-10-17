@@ -20,6 +20,8 @@ Four user settings alter the behavior of the demonstration (see code for further
 
 By default, the modified Gram-Schmidt procedure is used in place of the Gram-Schmidt process described in Steps 8 and 9 of Algorithm 2 in [1].  This can be disabled by setting `mgs = 0`.
 
+Note that this example does not include any of the time-domain, multi-frequency techniques discussed in Sec. II-B of [1].
+
 ## Timing and performance
 
 Live plot updates greatly increase the apparent time of the iterative algorithm. To accurately assess the relative computational cost of calculating characteristic modes using the full scattering dyadic versus the iterative algorithm, disable the plotting and full-wave acceleration features (`fastflag = 0` and `plotting = 0`).  With these settings, along with no undersampling (`undersampling = 1`), the following computational times, numbers of iterations, and numbers of modes with modal significance greater than 0.01 were obtained on a MacBook Air (M1, 2020):
